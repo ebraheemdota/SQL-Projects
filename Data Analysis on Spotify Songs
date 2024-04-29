@@ -1,0 +1,12 @@
+-- Data set: Top spotify songs until 2023
+-- Source: https://drive.google.com/file/d/1RZcXSXaDKVUEj8sIvm_lx82iFp9DTzRa/view?usp=drive_link
+
+-- What is the average danceability by artist?
+SELECT track_name, track_artist, track_popularity, ROUND(AVG(danceability),3 AS avg_danceability
+FROM spotify_songs
+GROUP BY artist_name
+ORDER BY avg_dancebility DESC;
+
+
+
+
