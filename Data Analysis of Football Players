@@ -1,0 +1,33 @@
+-- The Football Performance Metrics dataset provides comprehensive insights into the performance of football players across various leagues and seasons. 
+It encompasses a wide range of performance metrics and attributes, allowing for detailed analysis of player and team performance.
+
+This dataset is invaluable for football analysts, coaches, and enthusiasts interested in conducting detailed performance analysis of players and teams.
+By leveraging the wealth of performance metrics provided, analysts can gain insights into passing accuracy, crossing proficiency, free kick expertise, and overall player contribution to team success. The dataset enables the evaluation of player performance over time, comparison between different players and positions, and identification of key areas for improvement.
+
+
+-- DATA SET: https://drive.google.com/drive/folders/1yWPZ5RiGuzzRPpIsRZrhuBDueJWOKf2A?usp=drive_link
+
+-- What is the average pass accuracy for players in each position?
+
+SELECT player_name, club, ROUND(AVG(pass_accuracy),2) AS avg_pass_accuracy, match_played, position
+FROM distribution
+GROUP BY player_name, club, distribution
+ORDER BY avg_pass_accuracy DESC;
+
+-- Determine whether players in different positions (e.g., forward, midfielder, defender) have different pass accuracy levels by categorizing them as "High Pass Accuracy", "Medium Pass Accuracy", or "Low Pass Accuracy".
+SELECT player_name, club, position, ROUND(AVG(pass_accuracy),2) AS avg_pass_accuracy,
+CASE
+WHEN avg_pass_accuracy >= 80 THEN 'High ' || position
+WHEN avg_pass_accuracy >60 AND <80 THEN 'Medium ' || position
+ELSE 'Low ' || position
+END AS pass_accuracy_category
+FROM distribution
+GROUP BY player_name, club, position
+ORDER BY avg_pass_accuracy DESC;
+
+--  Retrieve player names, positions, and the number of tackles made from the "defending" table. Left join with the "disciplinary" table to also include the number of yellow cards received by each player.
+SELECT defending.player_name, defending.position, SUM(defending.tackles)
+FROM defending
+LEFT JOIN disciplinary.yellow
+ON defending.player_name= disciplinary.yellow.player_name
+GROUP BY defending.player_name, defending.position
